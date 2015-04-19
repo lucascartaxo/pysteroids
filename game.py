@@ -40,9 +40,8 @@ class Game :
         clock = pygame.time.Clock()
         while True:
             self.process_input(pygame.event.get())
-            if self.playing :
-                #Move os objetos
-                # self.move_objects()
+            if self.playing:
+                self.update()
                 
                 #passa os objetos para a tela
                 self.draw_objects()
@@ -63,13 +62,26 @@ class Game :
                 pygame.display.flip()
 
     def process_input(self,events):
+        
         #pega as teclas pressionadas
-        keystate = pygame.key.get_pressed()
+        keystate = pygame.key.get_pressed() 
         
         #processa os eventos
         for event in events: 
                 if event.type == QUIT or keystate[K_ESCAPE]:
                         sys.exit(0)
+
+                if keystate[K_LEFT]:
+                    self.ship.rotate_left()
+
+                if keystate[K_RIGHT]:
+                    self.ship.rotate_right()
+                
+                if keystate[K_UP]:
+                    self.ship.accelerate()
+
+                if keystate[K_DOWN]:
+                    self.ship.decelerate()
 
                 if keystate[K_RETURN]:
                     if self.playing ==  False or self.win == True:
@@ -79,6 +91,8 @@ class Game :
                         self.ship.lives = 3
                         self.reset()
                         self.start_field()
+                        
+                        
                 print(event)
 
     def draw_objects(self):
@@ -90,3 +104,6 @@ class Game :
         self.ship.draw(self.screen)
 
         pygame.display.flip()
+
+    def update(self):
+        self.ship.update()
