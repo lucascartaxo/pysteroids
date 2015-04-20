@@ -5,6 +5,7 @@
 import pygame, sys,os
 from pygame.locals import *
 from ship import *
+from common import *
 import math
 import random
 
@@ -17,7 +18,7 @@ class Game :
         
         
         #tamanho da tela.
-        self.screen_size = (640,480)
+        self.screen_size = (Common.SCREEN_SIZE)
         
         #inicializa o pygame
         pygame.init()
@@ -45,8 +46,11 @@ class Game :
                 
                 #passa os objetos para a tela
                 self.draw_objects()
-                
-                clock.tick(200)
+
+                time = pygame.time.get_ticks()
+                pygame.display.update()
+                clock.tick(24)  
+
             elif self.over:
                 self.window.fill((255,255,255))
                 self.draw_over()
@@ -62,28 +66,28 @@ class Game :
                 pygame.display.flip()
 
     def process_input(self,events):
-        
         #pega as teclas pressionadas
         keystate = pygame.key.get_pressed() 
         
         #processa os eventos
         for event in events: 
-                if event.type == QUIT or keystate[K_ESCAPE]:
-                        sys.exit(0)
+            if event.type == QUIT or keystate[K_ESCAPE]:
+                    sys.exit(0)
 
-                if keystate[K_LEFT]:
+            if event.type == KEYDOWN:
+                if event.key == pygame.K_LEFT:
                     self.ship.rotate_left()
 
-                if keystate[K_RIGHT]:
+                if event.key == pygame.K_RIGHT:
                     self.ship.rotate_right()
                 
-                if keystate[K_UP]:
+                if event.key == pygame.K_UP:
                     self.ship.accelerate()
 
-                if keystate[K_DOWN]:
+                if event.key == pygame.K_DOWN:
                     self.ship.decelerate()
 
-                if keystate[K_RETURN]:
+                if event.key == pygame.K_RETURN:
                     if self.playing ==  False or self.win == True:
                         self.playing = True
                         self.over = False
@@ -91,9 +95,8 @@ class Game :
                         self.ship.lives = 3
                         self.reset()
                         self.start_field()
-                        
-                        
-                print(event)
+
+            print(event)
 
     def draw_objects(self):
         self.screen.fill((255,255,255))
