@@ -15,8 +15,9 @@ class Game :
         self.playing = True
         self.over = False
         self.win = False
-        
-        
+
+        self.sprite_list = [];
+
         #tamanho da tela.
         self.screen_size = (Common.SCREEN_SIZE)
         
@@ -33,7 +34,8 @@ class Game :
         pygame.display.set_caption("PYSTEROIDS")
         
         #Nave principal.
-        self.ship = Ship(self.screen)
+        self.sprite_list.append(Ship(self.screen))
+        self.ship = self.sprite_list[0]
         
         # self.start_field()
 
